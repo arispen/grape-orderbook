@@ -15,14 +15,12 @@ describe('distributed exchange', () => {
         await buy(300, 10)
         await sell(400, 9)
 
-        
-
         await new Promise((res,rej) => setTimeout(()=>{res()}, 2000))
 
         console.log(getOrders(()=>true))
 
         // remains: sell 100 at price 9
-        const remainder = getOrders(o => {o.side === 'SELL' && o.price === 9})
+        const remainder = getOrders(o => o.side === 'SELL' && o.price === 9)[0]
         expect(remainder.amount).toEqual(100)
     })
 })
