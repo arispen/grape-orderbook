@@ -6,7 +6,7 @@ async function submitOrder(amount, price, side) {
     // TODO: implement transaction here, retry/revert in case of state of orderBook mismatch
     const order = ordersService.pushOrderToOrderBook(amount, price, side)
     ordersService.matchOrders(order)
-    await networkingService.distributeOrder({ amount, price, side })
+    await networkingService.distributeOrder(order)
 }
 
 

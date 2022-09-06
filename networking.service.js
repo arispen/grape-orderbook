@@ -8,6 +8,7 @@ const link = new Link({
     grape: 'http://127.0.0.1:30001'
 })
 
+let peerRPCClient
 
 function bootstrapPeer(callback) {
     link.start()
@@ -26,15 +27,18 @@ function bootstrapPeer(callback) {
     }, 1000)
 
     service.on('request', (rid, key, payload, handler) => {
-        console.log(payload) //  { msg: {amount, price, side} }
-        ordersService.pushOrderToOrderBook({ ...payload.msg })
+        const order = { ...payload.msg }
+        ordersService.pushOrderToOrderBook(order.amount,
+            order.price,
+            order.side,
+            order.time,
+            order.hash)
         handler.reply(null, { msg: 'ok' })
     })
 
-    // FIXME: spawning client can cause nondeterministic
-    //  'Error: ERR_REQUEST_GENERIC: connect ECONNREFUSED'
+    // FIXME: remove this timeout
     setTimeout(() => {
-        const peerRPCClient = new PeerRPCClient(link, {})
+        peerRPCClient = new PeerRPCClient(link, {})
         peerRPCClient.init()
         callback()
     }, 1500)
@@ -49,7 +53,6 @@ function distributeOrder(order) {
                 reject(err);
                 process.exit(-1)
             }
-            console.log(data) // { msg: 'ok' }
             resolve(data);
         })
     });
