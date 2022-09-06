@@ -4,8 +4,8 @@ const networkingService = require("./networking.service")
 
 function submitOrder(amount, price, side) {
     // TODO: implement transaction here, retry/revert in case of state of orderBook mismatch
-    ordersService.pushOrderToOrderBook(amount, price, side)
-    ordersService.matchOrders()
+    const order = ordersService.pushOrderToOrderBook(amount, price, side)
+    ordersService.matchOrders(order)
     networkingService.distributeOrder({ amount, price, side })
 }
 

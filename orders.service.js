@@ -18,8 +18,10 @@ function pushOrderToOrderBook(amount, price, side) {
     })
 }
 
-function matchOrders() {
-    
+function matchOrders(order) {
+    // orders are pushed to order book's end
+    // to implement fifo, we just iterate from the beggining
+
 }
 
 function getOrders(predicate) {
