@@ -1,12 +1,12 @@
 'use strict'
 const { matchOrders, pushOrderToOrderBook, getOrders } = require("./orders.service")
-const { distributeOrder } = require("./networking.service")
+const networkingService = require("./networking.service")
 
 function submitOrder(amount, price, side) {
     // TODO: implement transaction here, retry/revert in case of state of orderBook mismatch
     pushOrderToOrderBook(amount, price, side)
     matchOrders()
-    distributeOrder({ amount, price, side })
+    networkingService.distributeOrder({ amount, price, side })
 }
 
 

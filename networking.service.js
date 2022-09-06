@@ -2,6 +2,7 @@
 const { PeerRPCServer } = require('grenache-nodejs-http')
 const { PeerRPCClient } = require('grenache-nodejs-http')
 const Link = require('grenache-nodejs-link')
+const ordersService = require('./orders.service')
 
 const link = new Link({
     grape: 'http://127.0.0.1:30001'
@@ -25,7 +26,7 @@ setInterval(function () {
 
 service.on('request', (rid, key, payload, handler) => {
     console.log(payload) //  { msg: {amount, price, side} }
-    // TODO: handle incoming order
+    ordersService.pushOrderToOrderBook({ ...payload.msg })
     handler.reply(null, { msg: 'ok' })
 })
 
@@ -47,4 +48,4 @@ function distributeOrder(order) {
     })
 }
 
-module.exports = {distributeOrder}
+module.exports = { distributeOrder }
