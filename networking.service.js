@@ -42,13 +42,18 @@ function bootstrapPeer(callback) {
 
 
 function distributeOrder(order) {
-    peerRPCClient.request('rpc_test', { msg: order }, { timeout: 10000 }, (err, data) => {
-        if (err) {
-            console.error(err)
-            process.exit(-1)
-        }
-        console.log(data) // { msg: 'ok' }
-    })
+    return new Promise((resolve, reject) => {
+        peerRPCClient.request('rpc_test', { msg: order }, { timeout: 10000 }, (err, data) => {
+            if (err) {
+                console.error(err)
+                reject(err);
+                process.exit(-1)
+            }
+            console.log(data) // { msg: 'ok' }
+            resolve(data);
+        })
+    });
+
 }
 
 module.exports = { distributeOrder, bootstrapPeer }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx jest"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +12,8 @@
   "dependencies": {
     "grenache-nodejs-http": "^0.7.12",
     "grenache-nodejs-link": "^0.7.12"
+  },
+  "devDependencies": {
+    "jest": "^29.0.2"
   }
 }

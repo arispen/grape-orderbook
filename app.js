@@ -2,20 +2,20 @@
 const ordersService = require("./orders.service")
 const networkingService = require("./networking.service")
 
-function submitOrder(amount, price, side) {
+async function submitOrder(amount, price, side) {
     // TODO: implement transaction here, retry/revert in case of state of orderBook mismatch
     const order = ordersService.pushOrderToOrderBook(amount, price, side)
     ordersService.matchOrders(order)
-    networkingService.distributeOrder({ amount, price, side })
+    await networkingService.distributeOrder({ amount, price, side })
 }
 
 
-function buy(amount, price) {
-    submitOrder(amount, price, 'BUY')
+async function buy(amount, price) {
+    await submitOrder(amount, price, 'BUY')
 }
 
-function sell(amount, price) {
-    submitOrder(amount, price, 'SELL')
+async function sell(amount, price) {
+    await submitOrder(amount, price, 'SELL')
 }
 
 module.exports = { buy, sell }
