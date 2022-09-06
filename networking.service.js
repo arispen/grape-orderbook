@@ -1,7 +1,6 @@
 'use strict'
-
-const { PeerRPCServer }  = require('grenache-nodejs-http')
-const { PeerRPCClient }  = require('grenache-nodejs-http')
+const { PeerRPCServer } = require('grenache-nodejs-http')
+const { PeerRPCClient } = require('grenache-nodejs-http')
 const Link = require('grenache-nodejs-link')
 
 const link = new Link({
@@ -25,22 +24,27 @@ setInterval(function () {
 }, 1000)
 
 service.on('request', (rid, key, payload, handler) => {
-    console.log(payload) //  { msg: 'hello' }
-    handler.reply(null, { msg: 'world' })
+    console.log(payload) //  { msg: {amount, price, side} }
+    // TODO: handle incoming order
+    handler.reply(null, { msg: 'ok' })
 })
 
 
 // FIXME: spawning client can cause nondeterministic
 //  'Error: ERR_REQUEST_GENERIC: connect ECONNREFUSED'
-setTimeout(()=>{
-    // region client
+setTimeout(() => {
     const peerRPCClient = new PeerRPCClient(link, {})
     peerRPCClient.init()
-    peerRPCClient.request('rpc_test', { msg: 'hello' }, { timeout: 10000 }, (err, data) => {
+}, 1500)
+
+function distributeOrder(order) {
+    peerRPCClient.request('rpc_test', { msg: order }, { timeout: 10000 }, (err, data) => {
         if (err) {
             console.error(err)
             process.exit(-1)
         }
-        console.log(data) // { msg: 'world' }
+        console.log(data) // { msg: 'ok' }
     })
-},1500)
+}
+
+module.exports = {distributeOrder}
